@@ -34,9 +34,6 @@ module.exports = function (app, passport) {
         function (req, email, password, done) {
             process.nextTick(function () {
                 userDAO.getUserByEmail(email).then(function(user) {
-                    if (err)
-                        return done(err);
-
                     if (user) {
                         return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                     } else {
@@ -46,9 +43,11 @@ module.exports = function (app, passport) {
                         newUser.password = password;
 
                         // save the user
-                        userDAO.create(newUser).then(function (newUser) {
+                        userDAO.create(newUser, function (err, newUser) {
+                            if(err)
+                                return done(err);
                              done(null, newUser);
-                        }).catch(done);;
+                        })
                     }
 
                 })

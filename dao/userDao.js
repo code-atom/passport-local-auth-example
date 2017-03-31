@@ -1,15 +1,16 @@
 
 var db = require('../models');
 
-exports.create = function (email, password) {
+exports.create = function (data, done) {
     db.User.setPassword(data.password, function (err, hash, salt) {
         var user = db.User.build({
-            userName: data.userName,
-            name: data.name,
+            email: data.email,
             passwordHash: hash,
             passwordSalt: salt,
         });
-        return user.save();
+        user.save().then(function(user){
+            done(null , user);
+        }).catch(done);
     });
 };
 
@@ -28,10 +29,10 @@ exports.getUserByEmail = function (email) {
     });
 }
 exports.comparePassword = function (password, passwordHash, done) {
-    userDAO.comparePassword(password, user.passwordHash, function (err, status) {
+    db.User.comparePassword(password, passwordHash, function (err, status) {
         if (err) {
             return done(err);
         }
-        return done(null, user);
+        return done(null, status);
     });
 };  

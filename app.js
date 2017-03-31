@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var db = require('./models');
 
 var app = express();
 app.set('rootPath', __dirname);
@@ -23,10 +24,11 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000, function () {
-  console.log('%s: Node server started on %s:%d ...',
-    Date(Date.now()));
-});
+db.sequelize.sync();
 
+app.listen(3000, function () {
+    console.log('%s: Node server started on %s:%d ...',
+      Date(Date.now()));
+  });
 
 module.exports = app;
