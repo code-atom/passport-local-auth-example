@@ -41,7 +41,8 @@ module.exports = function (app, passport) {
                         // set the user's local credentials
                         newUser.email = email;
                         newUser.password = password;
-
+                        newUser.phone = req.body.phone;
+                        newUser.type = req.body.type;
                         // save the user
                         userDAO.create(newUser, function (err, newUser) {
                             if(err)

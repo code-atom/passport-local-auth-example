@@ -12,6 +12,8 @@ module.exports = function (sequelize, DataTypes) {
         email: DataTypes.STRING,
         passwordHash: DataTypes.STRING,
         passwordSalt: DataTypes.STRING,
+        type : DataTypes.STRING,
+        phone: DataTypes.STRING
     }, {
         instanceMethods: {
             json: function () {

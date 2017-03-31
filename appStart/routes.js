@@ -1,6 +1,6 @@
 var home = require('../controllers/homeController')
 module.exports = function (app, passport) {
-    app.get('/', home.index);
+    app.get('/', isNotLoggedIn, home.index);
     app.get('/dashboard', isLoggedIn, home.dashboard);
 
     app.post('/signup', passport.authenticate('local-signup', {
@@ -13,6 +13,10 @@ module.exports = function (app, passport) {
         failureRedirect: '/', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
+    
+    app.get("*", function(req, res){
+        res.redirect('/');
+    })
 }
 
 
@@ -22,4 +26,12 @@ function isLoggedIn(req, res, next) {
         return next();
     // if they aren't redirect them to the home page
     res.redirect('/');
+}
+
+function isNotLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on 
+    if (!req.isAuthenticated())
+        return next();
+    // if they aren't redirect them to the home page
+    res.redirect('/dashboard');
 }

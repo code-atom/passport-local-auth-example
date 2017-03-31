@@ -7,6 +7,8 @@ exports.create = function (data, done) {
             email: data.email,
             passwordHash: hash,
             passwordSalt: salt,
+            phone: data.phone,
+            type: data.type
         });
         user.save().then(function(user){
             done(null , user);
